@@ -74,12 +74,8 @@ def test_single_volume(image, label, net, classes, patch_size=[256, 256], test_s
         prediction = np.zeros_like(label)
         xx1, yy1, xx2, yy2 = [], [], [], []
         roi = []
-        sco = []
         for ind in range(image.shape[0]):
-            img_path = 'img_path'
-            result = mod(img_path)
-            r = []
-            s = []
+            result = mod(image)
             for res in result:
                 boxes = res.boxes.xyxy.tolist()
                 scores = res.boxes.conf.tolist()
