@@ -60,8 +60,6 @@ parser.add_argument('--eval', action='store_true', help='Perform evaluation only
 parser.add_argument('--throughput', action='store_true', help='Test throughput only')
 
 args = parser.parse_args()
-if args.dataset == "Synapse":
-    args.root_path = os.path.join(args.root_path, "train_npz")
 config = get_config(args)
 
 
