@@ -64,7 +64,7 @@ def calculate_metric_percase(pred, gt):
     else:
         return 0, 0
 
-def test_single_volume(image, label, net, classes, patch_size=[256, 256], test_save_path=None, case=None, z_spacing=1, roi=[]):
+def test_single_volume(image, label, net, classes, patch_size=[256, 256], test_save_path=None, case=None, z_spacing=1):
     image, label = image.squeeze(0).cpu().detach().numpy(), label.squeeze(0).cpu().detach().numpy()
     # image0 = image.copy()
 
@@ -141,9 +141,21 @@ def test_single_volume(image, label, net, classes, patch_size=[256, 256], test_s
                 prediction[ind] = pre
     else:
         image0 = image.copy()
+        x, y = image.shape[0], image.shape[1]
+        roi = [0, 0, x, y]
+        result = mod(image0)
+            for res in result:
+                boxes = res.boxes.xyxy.tolist()
+                scores = res.boxes.conf.tolist()
+                if len(scores) == 0:
+                    continue
+                max_index = scores.index(max(scores))
+
+                if max(scores) < 0.5:
+                    continue
+                roi = boxes[max_index]
 
         image = image[roi[1]:roi[3], roi[0]:roi[2]]
-        x, y = image.shape[0], image.shape[1]
 
         img = image.copy()
         if x != patch_size[0] or y != patch_size[1]:
@@ -163,7 +175,6 @@ def test_single_volume(image, label, net, classes, patch_size=[256, 256], test_s
         else:
             pred = np.zeros_like(image0)
 
-        # pred[roi[1]:roi[3], roi[0]:roi[2]] = prediction
         try:
             pred[roi[1]:roi[3], roi[0]:roi[2]] = prediction
         except:
