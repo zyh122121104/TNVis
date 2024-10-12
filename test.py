@@ -72,7 +72,8 @@ config = get_config(args)
 
 def inference(args, model, test_save_path=None):
     db_test = args.Dataset(base_dir=args.volume_path, split="test_vol", list_dir=args.list_dir)
-    testloader = DataLoader(db_test, batch_size=1, shuffle=False, num_workers=1)
+    testloader = DataLoader(db_test, batch_size=2, shuffle=False, num_workers=1)
+    # testloader = DataLoader(db_test, batch_size=1, shuffle=False, num_workers=1)
     logging.info("{} test iterations per epoch".format(len(testloader)))
     model.eval()
     metric_list = 0.0
