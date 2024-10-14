@@ -200,7 +200,6 @@ def test_single_volume(image, label, net, classes, patch_size=[256, 256], test_s
         os.makedirs(test_save_path + '/' + case.split('/')[0] + '/' + case.split('/')[1], exist_ok=True)
         img_itk = sitk.GetImageFromArray(image.astype(np.float32))
         prd_itk = sitk.GetImageFromArray(prediction.astype(np.float32))
-        # prd_itk = sitk.GetImageFromArray(interpolated_segmentation.astype(np.float32))
         lab_itk = sitk.GetImageFromArray(label.astype(np.float32))
         img_itk.SetSpacing((1, 1, z_spacing))
         prd_itk.SetSpacing((1, 1, z_spacing))
