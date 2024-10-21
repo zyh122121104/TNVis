@@ -8,6 +8,7 @@ import cv2
 import os
 from ultralytics import YOLO
 import PIL.Image as Image
+import nibabel as nib
 # from skimage import data, io, segmentation, color
 # from scipy.optimize import minimize
 # from scipy.spatial.distance import euclidean
@@ -208,4 +209,97 @@ def test_single_volume(image, label, net, classes, patch_size=[256, 256], test_s
         sitk.WriteImage(img_itk, test_save_path + '/'+ case + "_img.nii.gz")
         sitk.WriteImage(lab_itk, test_save_path + '/'+ case + "_gt.nii.gz")
     return metric_list
+
+def find_w_h(img):
+    ret, binary_image = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY)
+
+    binary_image = binary_image.astype('uint8')
+    
+    contours, hierarchy = cv2.findContours(binary_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    max_contour = max(contours, key=cv2.contourArea)
+    
+    (x, y), (width, height), angle = cv2.fitEllipse(max_contour)
+    
+    return height, width
+
+def fill_holes(image):
+    img = image.copy()
+
+    contours, _ = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    for contour in contours:
+        cv2.drawContours(img, [contour], 0, 255, cv2.FILLED)
+
+    return img
+
+def fill_holes_3D(volume):
+    vol = volume.copy()
+    for i in range(vol.shape[0]):
+        vol[i] = fill_holes(vol[i])
+    return vol
+
+def post_processing():
+    nii_file1 = nib.load('./D_pred.nii.gz')
+    img1 = nib.load('./D_img.nii.gz')
+    img1 = img1.get_fdata()
+    img1 = np.array(img1)
+    
+    data1 = nii_file1.get_fdata()
+    
+    a1 = np.array(data1)
+    img = a1.copy()
+    img[img>0] == 255
+    img = img.astype(np.uint8)
+    numpy_array1 = fill_holes_3D(img)
+    numpy_array1 = numpy_array1 / 255
+    
+    
+    w1 = []
+    h1 = []
+    ind1 = np.where(numpy_array1 == 1)
+    minindex1 = np.min(ind1, axis=1)
+    maxindex1 = np.max(ind1, axis=1)
+    for i in range(numpy_array1.shape[2]):
+        indices1 = numpy_array1[:,:,i]
+        p = np.where(numpy_array1[:,:,i] == 1)
+        if np.size(p) <= 5:
+            continue
+        width, height = find_w_h(indices1)
+    
+        w1.append(width)
+        h1.append(height)
+    width1 = max(w1)
+    height1 = h1[w1.index(max(w1))]
+    depth1 = maxindex1[2] - minindex1[2] + 1
+    
+    nii_file2 = nib.load('./L_pred.nii.gz')
+    data2 = nii_file2.get_fdata()
+    numpy_array2 = np.array(data2)
+    w2 = []
+    h2 = []
+    ind2 = np.where(numpy_array2 == 1)
+    minindex2 = np.min(ind2, axis=1)
+    maxindex2 = np.max(ind2, axis=1)
+    for i in range(numpy_array2.shape[2]):
+        indices2 = numpy_array2[:,:,i]
+        p = np.where(numpy_array2[:,:,i] == 1)
+        if np.size(p) <= 5:
+            continue
+        width, height = find_w_h(indices2)
+    
+        w2.append(width)
+        h2.append(height)
+    width2 = max(w2)
+    height2 = h2[w2.index(max(w2))]
+    depth2 = maxindex2[2] - minindex2[2] + 1
+    scale_factor = (depth1/(width2*height1/height2), depth1/(width2*height1/height2), 1.0)
+    resized_data = zoom(numpy_array1, scale_factor, order=1).transpose(2,1,0)
+    resized_img = zoom(img1, scale_factor, order=1).transpose(2,1,0)
+    prd_itk = sitk.GetImageFromArray(resized_data.astype(np.float32))
+    prd_itk.SetSpacing((1, 1, 1))
+    sitk.WriteImage(prd_itk, './pred.nii.gz')
+    img_itk = sitk.GetImageFromArray(resized_img.astype(np.float32))
+    img_itk.SetSpacing((1, 1, 1))
+    sitk.WriteImage(img_itk, './img.nii.gz')
 
