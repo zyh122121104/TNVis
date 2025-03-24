@@ -17,20 +17,20 @@ Test
 `python test.py --dataset Synapse --cfg configs/swin_tiny_patch4_window7_224_lite.yaml --is_saveni --volume_path your DATA_DIR --output_dir your OUT_DIR --max_epoch 300 --base_lr 0.05 --img_size 224 --batch_size 24`
 
 # Citations
-`@article{zhou2025deep, 
+`@article{zhou2025deep,
 
-  title={A deep learning based ultrasound diagnostic tool driven by 3D visualization of thyroid nodules}, 
+  title={A deep learning based ultrasound diagnostic tool driven by 3D visualization of thyroid nodules},
   
-  author={Zhou, Yahan and Chen, Chen and Yao, Jincao and Yu, Jiabin and Feng, Bojian and Sui, Lin and Yan, Yuqi and Chen, Xiayi and Liu, Yuanzhen and Zhang, Xiao and others}, 
+  author={Zhou, Yahan and Chen, Chen and Yao, Jincao and Yu, Jiabin and Feng, Bojian and Sui, Lin and Yan, Yuqi and Chen, Xiayi and Liu, Yuanzhen and Zhang, Xiao and others},
   
-  journal={npj Digital Medicine}, 
+  journal={npj Digital Medicine},
   
-  volume={8}, 
+  volume={8},
   
-  number={1}, 
+  number={1},
   
-  pages={126}, 
+  pages={126},
   
-  year={2025} 
+  year={2025}
   
 }`
