@@ -1,6 +1,6 @@
 # TNVis
 Thyroid nodules visualization.
-Source code of the paper "A Deep-learning Based Ultrasound Diagnostic Tool for Three-Dimensional Visualization of Thyroid Nodules: A Multicenter Diagnostic Study".
+Source code of the paper ["A Deep-learning Based Ultrasound Diagnostic Tool for Three-Dimensional Visualization of Thyroid Nodules: A Multicenter Diagnostic Study"](https://www.nature.com/articles/s41746-025-01455-y).
 # Download pre-trained swin transformer model (Swin-T)
 [Get pre-trained model in this link] (https://drive.google.com/drive/folders/1UC3XOoezeum0uck4KBVGa8osahs6rKUY?usp=sharing): Put pretrained Swin-T into folder "pretrained_ckpt/"
 # Environment
