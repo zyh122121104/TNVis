@@ -19,5 +19,5 @@ Test
 # Citations
 If you find this work helpful, please cite the following paper:
 
-**Zhou, Yahan**, Chen, Chen, Yao, Jincao, Yu, Jiabin, Feng, Bojian, Sui, Lin, Yan, Yuqi, Chen, Xiayi, Liu, Yuanzhen, Zhang, Xiao, et al. (2025). *A deep learning based ultrasound diagnostic tool driven by 3D visualization of thyroid nodules*. *npj Digital Medicine*, 8(1), 126.  
+**Zhou, Yahan**, Chen, Chen, Yao, Jincao, et al. (2025). *A deep learning based ultrasound diagnostic tool driven by 3D visualization of thyroid nodules*. *npj Digital Medicine*, 8(1), 126.  
 [DOI: 10.1038/s41746-025-01455-y](https://doi.org/10.1038/s41746-025-01455-y)
